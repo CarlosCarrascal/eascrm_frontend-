@@ -19,8 +19,8 @@ const ImageWithFallback = ({ src, alt, className, fallbackText = 'Sin imagen', f
     if (src && !src.startsWith('http://') && !src.startsWith('https://')) {
       // Si la URL no comienza con /, añadirlo
       const normalizedSrc = src.startsWith('/') ? src : `/${src}`;
-      setImgSrc(`http://localhost:8000${normalizedSrc}`);
-      console.log("URL de imagen convertida:", `http://localhost:8000${normalizedSrc}`);
+      setImgSrc(`https://xvdarlin.pythonanywhere.com${normalizedSrc}`);
+      console.log("URL de imagen convertida:", `https://xvdarlin.pythonanywhere.com${normalizedSrc}`);
     } else {
       setImgSrc(src);
       console.log("URL de imagen original:", src);

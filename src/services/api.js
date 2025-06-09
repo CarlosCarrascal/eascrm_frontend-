@@ -2,7 +2,7 @@ import { axiosInstance } from './authService';
 import axios from 'axios';
 
 // URL base de la API
-const API_URL = 'http://localhost:8000/api/';
+const API_URL = 'https://xvdarlin.pythonanywhere.com/api/';
 
 // Crea una instancia de axios específica para consumir la API
 const apiClient = axios.create({

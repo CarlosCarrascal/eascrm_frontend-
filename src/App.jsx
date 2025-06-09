@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contexts/AuthContext';
 import { CartProvider } from './contexts/CartContext';
 import Layout from './components/Layout';
@@ -9,6 +9,7 @@ import CartPage from './pages/CartPage';
 import OrdersPage from './pages/OrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -17,38 +18,35 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <Routes>
-            {/* Rutas dentro del layout principal */}
             <Route path="/" element={<Layout />}>
-              {/* Rutas públicas */}
               <Route index element={<HomePage />} />
               <Route path="productos" element={<ProductosPage />} />
               <Route path="productos/:id" element={<ProductDetailPage />} />
-              
-              {/* Rutas protegidas que requieren autenticación */}
-              <Route path="carrito" element={
-                <ProtectedRoute>
-                  <CartPage />
-                </ProtectedRoute>
-              } />
-              <Route path="pedidos" element={
-                <ProtectedRoute>
-                  <OrdersPage />
-                </ProtectedRoute>
-              } />
-              <Route path="pedidos/:id" element={
-                <ProtectedRoute>
-                  <OrderDetailPage />
-                </ProtectedRoute>
-              } />
+              <Route
+                path="carrito"
+                element={<ProtectedRoute><CartPage /></ProtectedRoute>}
+              />
+              <Route
+                path="pedidos"
+                element={<ProtectedRoute><OrdersPage /></ProtectedRoute>}
+              />
+              <Route
+                path="pedidos/:id"
+                element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>}
+              />
             </Route>
-            
-            {/* Rutas fuera del layout principal */}
             <Route path="login" element={<LoginPage />} />
-            <Route path="*" element={<div className="container mx-auto p-8 text-center">
-              <h1 className="text-3xl font-bold mb-4">Página no encontrada</h1>
-              <p className="mb-4">La página que estás buscando no existe.</p>
-              <a href="/" className="btn btn-primary">Volver al inicio</a>
-            </div>} />
+            <Route path="registro" element={<RegisterPage />} />
+            <Route
+              path="*"
+              element={
+                <div className="container mx-auto p-8 text-center">
+                  <h1 className="text-3xl font-bold mb-4">Página no encontrada</h1>
+                  <p className="mb-4">La página que estás buscando no existe.</p>
+                  <a href="/" className="btn btn-primary">Volver al inicio</a>
+                </div>
+              }
+            />
           </Routes>
         </CartProvider>
       </AuthProvider>

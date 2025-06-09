@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:8000/api/';
+const API_URL = 'https://xvdarlin.pythonanywhere.com/api/';
 
 // Crear una instancia de axios con la configuración base
 const axiosInstance = axios.create({
@@ -26,6 +26,16 @@ axiosInstance.interceptors.request.use(
 
 // Funciones del servicio de autenticación
 const authService = {
+  // Registrar usuario
+  register: async (userData) => {
+    try {
+      const response = await axios.post(API_URL + 'register/', userData);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+
   // Iniciar sesión
   login: async (username, password) => {
     try {

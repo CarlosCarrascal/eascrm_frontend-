@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { FaLock, FaUser, FaExclamationCircle, FaShoppingCart } from 'react-icons/fa';
+import { FaLock, FaUser, FaExclamationCircle, FaShoppingCart, FaCheckCircle } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import { TextInput, Button } from '../components/FormElements';
 
@@ -12,6 +12,7 @@ export default function LoginPage() {
   // Obtener la ruta a la que redirigir después del login (si existe)
   const from = location.state?.from || '/';
   const action = location.state?.action || null;
+  const registrationSuccess = location.state?.registrationSuccess || false;
   
   // Estado del formulario
   const [formData, setFormData] = useState({
@@ -98,6 +99,14 @@ export default function LoginPage() {
             <div className="mt-4 bg-blue-50 p-3 rounded-md flex items-center text-sm text-blue-800">
               <FaShoppingCart className="mr-2 text-blue-500" />
               Inicia sesión para añadir productos a tu carrito
+            </div>
+          )}
+          
+          {/* Mensaje de registro exitoso */}
+          {registrationSuccess && (
+            <div className="mt-4 bg-green-50 p-3 rounded-md flex items-center text-sm text-green-800">
+              <FaCheckCircle className="mr-2 text-green-500" />
+              ¡Registro exitoso! Ahora puedes iniciar sesión con tus credenciales.
             </div>
           )}
         </div>
