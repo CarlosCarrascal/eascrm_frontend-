@@ -10,6 +10,7 @@ import OrdersPage from './pages/OrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import LinkClientPage from './pages/LinkClientPage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
             </Route>
             <Route path="login" element={<LoginPage />} />
             <Route path="registro" element={<RegisterPage />} />
+            <Route path="vincular-cliente" element={<LinkClientPage />} />
             <Route
               path="*"
               element={

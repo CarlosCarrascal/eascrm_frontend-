@@ -193,6 +193,13 @@ export default function LoginPage() {
             </Link>
           </p>
           
+          <p className="text-sm text-gray-600 mt-2">
+            ¿Ya eres cliente?{' '}
+            <Link to="/vincular-cliente" className="text-primary-500 hover:text-primary-600 font-medium">
+              Vincula tu cuenta
+            </Link>
+          </p>
+          
           {/* Botón para volver a la página anterior */}
           {from !== '/' && (
             <div className="mt-4">

@@ -43,6 +43,23 @@ const authService = {
     }
   },
 
+  // Vincular usuario a cliente existente
+  linkUserToClient: async (userData) => {
+    try {
+      console.log('Datos enviados para vinculación:', userData);
+      const response = await axios.post(API_URL + 'link-user-client/', userData);
+      console.log('Respuesta del servidor:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('Error en la vinculación:', error);
+      if (error.response) {
+        console.error('Datos de error:', error.response.data);
+        console.error('Estado HTTP:', error.response.status);
+      }
+      throw error;
+    }
+  },
+
   // Iniciar sesión
   login: async (username, password) => {
     try {
@@ -91,6 +108,21 @@ const authService = {
   // Verificar si el usuario está autenticado
   isAuthenticated: () => {
     return !!localStorage.getItem('token');
+  },
+
+  // Obtener datos del usuario actual
+  getCurrentUser: async () => {
+    try {
+      if (!authService.isAuthenticated()) {
+        throw new Error('No hay usuario autenticado');
+      }
+      
+      const response = await axiosInstance.get(API_URL + 'current-user/');
+      return response.data;
+    } catch (error) {
+      console.error('Error al obtener datos del usuario:', error);
+      throw error;
+    }
   },
 };
 
