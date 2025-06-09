@@ -1,0 +1,222 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-gray-50 text-gray-800 font-sans;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold text-gray-900;
+  }
+  
+  /* Tipografía mejorada */
+  h1 {
+    @apply text-3xl md:text-4xl leading-tight;
+  }
+  
+  h2 {
+    @apply text-2xl md:text-3xl leading-tight;
+  }
+  
+  h3 {
+    @apply text-xl md:text-2xl leading-snug;
+  }
+  
+  a {
+    @apply transition-colors duration-200;
+  }
+}
+
+@layer components {
+  /* Botones */
+  .btn {
+    @apply px-4 py-2 rounded-md font-medium transition-all duration-200 flex items-center justify-center shadow-sm hover:shadow focus:outline-none focus:ring-2 focus:ring-offset-1;
+  }
+  .btn-primary {
+    @apply bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-300;
+  }
+  .btn-secondary {
+    @apply bg-secondary-500 text-white hover:bg-secondary-600 focus:ring-secondary-300;
+  }
+  .btn-accent {
+    @apply bg-accent-500 text-white hover:bg-accent-600 focus:ring-accent-300;
+  }
+  .btn-danger {
+    @apply bg-danger-500 text-white hover:bg-danger-600 focus:ring-danger-300;
+  }
+  .btn-outline {
+    @apply border border-gray-300 bg-white text-gray-700 hover:bg-gray-100 hover:border-gray-400 focus:ring-gray-200;
+  }
+  .btn-sm {
+    @apply px-3 py-1.5 text-sm rounded;
+  }
+  .btn-lg {
+    @apply px-6 py-3 text-lg rounded-lg;
+  }
+  
+  /* Contenedores */
+  .card {
+    @apply bg-white rounded-lg shadow-md p-4 transition-all duration-300 hover:shadow-lg border border-gray-100;
+  }
+  .container-box {
+    @apply bg-white rounded-lg shadow-md p-6 mb-6 border border-gray-100;
+  }
+  
+  /* Hero y secciones */
+  .hero-section {
+    @apply py-12 md:py-20 px-4;
+  }
+  .section {
+    @apply py-10 md:py-16 px-4;
+  }
+  
+  /* Formularios */
+  .input {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200 bg-white text-gray-900 placeholder-gray-400;
+  }
+  .input-error {
+    @apply border-danger-300 focus:ring-danger-500 bg-danger-50;
+  }
+  .select {
+    @apply w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white transition-all duration-200 pr-10;
+  }
+  .form-label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+  .form-error {
+    @apply text-danger-500 text-sm mt-1;
+  }
+  .form-group {
+    @apply mb-4;
+  }
+  .form-hint {
+    @apply text-sm text-gray-500 mt-1;
+  }
+  
+  /* Tablas */
+  .table-container {
+    @apply overflow-x-auto rounded-lg shadow border border-gray-200;
+  }
+  .table {
+    @apply min-w-full bg-white;
+  }
+  .table-header {
+    @apply bg-gray-50 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 border-b border-gray-200;
+  }
+  .table-cell {
+    @apply px-5 py-3;
+  }
+  .table-row {
+    @apply border-b border-gray-200 hover:bg-gray-50 transition-colors duration-150;
+  }
+  .table-row:last-child {
+    @apply border-b-0;
+  }
+  
+  /* Animaciones y estados */
+  .fade-in {
+    @apply transition-opacity duration-300 ease-in-out;
+  }
+  .loading-spinner {
+    @apply animate-spin rounded-full border-t-2 border-b-2 border-primary-500 h-8 w-8;
+  }
+  
+  /* Utilidades */
+  .badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium;
+  }
+  .badge-success {
+    @apply bg-green-100 text-green-800;
+  }
+  .badge-warning {
+    @apply bg-yellow-100 text-yellow-800;
+  }
+  .badge-danger {
+    @apply bg-red-100 text-red-800;
+  }
+  .badge-info {
+    @apply bg-blue-100 text-blue-800;
+  }
+  
+  /* Sombras mejoradas */
+  .shadow-dropdown {
+    @apply shadow-lg;
+  }
+}
+
+@layer utilities {
+  /* Animaciones personalizadas */
+  .animate-fadeIn {
+    animation: fadeIn 0.2s ease-in-out forwards;
+  }
+  
+  .animate-slideDown {
+    animation: slideDown 0.3s ease-out forwards;
+  }
+  
+  .animate-pulse-once {
+    animation: pulse 1.5s ease-in-out;
+  }
+  
+  .hover-lift {
+    @apply transition-transform duration-300;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-5px);
+  }
+  
+  /* Recorte de texto */
+  .line-clamp-1 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
+/* Definiciones de animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
