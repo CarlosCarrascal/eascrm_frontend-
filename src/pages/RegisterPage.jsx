@@ -101,11 +101,47 @@ export default function RegisterPage() {
       
     } catch (err) {
       console.error('Error al registrar:', err);
-      setError(err.response?.data?.username || 
-               err.response?.data?.email || 
-               err.response?.data?.password || 
-               err.response?.data?.non_field_errors || 
-               'Error al registrar usuario');
+      
+      // Manejar diferentes tipos de errores
+      if (err.response) {
+        // El servidor respondió con un código de error
+        const responseData = err.response.data;
+        
+        if (typeof responseData === 'string') {
+          setError(responseData);
+        } else if (responseData.error) {
+          setError(responseData.error);
+        } else if (responseData.detail) {
+          setError(responseData.detail);
+        } else if (responseData.username) {
+          setError(responseData.username);
+        } else if (responseData.email) {
+          setError(responseData.email);
+        } else if (responseData.password) {
+          setError(responseData.password);
+        } else if (responseData.non_field_errors) {
+          setError(responseData.non_field_errors);
+        } else {
+          // Intentar mostrar todos los errores disponibles
+          const errorMessages = [];
+          Object.keys(responseData).forEach(key => {
+            if (Array.isArray(responseData[key])) {
+              errorMessages.push(`${key}: ${responseData[key].join(', ')}`);
+            } else {
+              errorMessages.push(`${key}: ${responseData[key]}`);
+            }
+          });
+          
+          if (errorMessages.length > 0) {
+            setError(errorMessages.join('. '));
+          } else {
+            setError('Error al registrar usuario. Por favor, intenta de nuevo.');
+          }
+        }
+      } else {
+        // Error de red u otro tipo de error
+        setError('Error de conexión. Por favor, verifica tu conexión a internet e intenta de nuevo.');
+      }
     } finally {
       setSubmitting(false);
     }

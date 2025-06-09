@@ -29,9 +29,16 @@ const authService = {
   // Registrar usuario
   register: async (userData) => {
     try {
+      console.log('Datos enviados al servidor:', userData);
       const response = await axios.post(API_URL + 'register/', userData);
+      console.log('Respuesta del servidor:', response.data);
       return response.data;
     } catch (error) {
+      console.error('Error en el registro:', error);
+      if (error.response) {
+        console.error('Datos de error:', error.response.data);
+        console.error('Estado HTTP:', error.response.status);
+      }
       throw error;
     }
   },
