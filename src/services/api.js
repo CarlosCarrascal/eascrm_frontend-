@@ -274,10 +274,29 @@ export const pedidoService = {
   
   create: async (pedido) => {
     try {
+      console.log('Datos enviados al servidor:', pedido);
       const response = await apiClient.post('pedidos/', pedido);
+      console.log('Respuesta del servidor:', response.data);
       return response.data;
     } catch (error) {
       console.error('Error al crear pedido:', error);
+      
+      // Mejorar los mensajes de error
+      if (error.response) {
+        console.error('Error de respuesta:', error.response.data);
+        
+        // Si hay un mensaje específico en el error
+        if (error.response.data.error) {
+          error.message = error.response.data.error;
+        } else if (error.response.data.detail) {
+          error.message = error.response.data.detail;
+        } else if (error.response.data.non_field_errors) {
+          error.message = error.response.data.non_field_errors[0];
+        } else if (typeof error.response.data === 'string') {
+          error.message = error.response.data;
+        }
+      }
+      
       throw error;
     }
   },

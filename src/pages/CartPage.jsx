@@ -18,7 +18,7 @@ import { pedidoService } from '../services/api';
 
 export default function CartPage() {
   const { cart, total, updateQuantity, removeFromCart, clearCart } = useCart();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, currentCliente } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -51,9 +51,9 @@ export default function CartPage() {
       setLoading(true);
       setError(null);
 
-      // Crear el pedido
+      // Crear el pedido - No necesitamos enviar el ID del cliente
+      // El backend lo asignará automáticamente basado en el token
       const pedido = {
-        cliente: 1, // Este debería ser el ID del cliente autenticado
         estado: 'pendiente',
         detalles: cart.map(item => ({
           producto: item.id,
@@ -61,8 +61,11 @@ export default function CartPage() {
         }))
       };
 
+      console.log('Datos enviados al servidor:', pedido);
+      
       // Enviar al backend
-      await pedidoService.create(pedido);
+      const response = await pedidoService.create(pedido);
+      console.log('Respuesta del servidor:', response);
       
       // Limpiar carrito y mostrar mensaje de éxito
       clearCart();
@@ -74,7 +77,25 @@ export default function CartPage() {
       }, 3000);
     } catch (err) {
       console.error("Error al procesar el pedido:", err);
-      setError(err.response?.data?.detail || "No se pudo procesar el pedido");
+      
+      // Extraer mensaje de error más significativo
+      let errorMessage = "No se pudo procesar el pedido";
+      
+      if (err.message) {
+        errorMessage = err.message;
+      } else if (err.response) {
+        if (err.response.data.error) {
+          errorMessage = err.response.data.error;
+        } else if (err.response.data.detail) {
+          errorMessage = err.response.data.detail;
+        } else if (err.response.data.non_field_errors) {
+          errorMessage = err.response.data.non_field_errors[0];
+        } else if (typeof err.response.data === 'string') {
+          errorMessage = err.response.data;
+        }
+      }
+      
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
