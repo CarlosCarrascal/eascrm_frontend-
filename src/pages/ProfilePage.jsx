@@ -147,8 +147,11 @@ export default function ProfilePage() {
       formDataObj.append('email', formData.email);
       formDataObj.append('direccion', formData.direccion);
       
+      let hasFoto = false;
       if (formData.foto) {
         formDataObj.append('foto', formData.foto);
+        hasFoto = true;
+        console.log("Enviando nueva foto:", formData.foto.name);
       }
       
       // Actualizar cliente
@@ -167,7 +170,16 @@ export default function ProfilePage() {
       }
       
       setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
+      
+      // Si se subió una nueva foto, forzar una recarga de la página después de unos segundos
+      if (hasFoto) {
+        setTimeout(() => {
+          console.log("Recargando página para refrescar la foto...");
+          window.location.reload();
+        }, 1500);
+      } else {
+        setTimeout(() => setSuccess(false), 3000);
+      }
     } catch (err) {
       console.error('Error al actualizar perfil:', err);
       setError(err.message || 'Error al actualizar el perfil');

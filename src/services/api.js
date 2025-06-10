@@ -229,8 +229,19 @@ export const clienteService = {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log('Respuesta del servidor:', response.data);
-      return response.data;
+      
+      // Añadir timestamp a la URL de la foto para evitar caché
+      const data = response.data;
+      if (data.foto) {
+        console.log('Foto recibida en respuesta:', data.foto);
+        data.foto = `${data.foto}?t=${new Date().getTime()}`;
+      } else if (data.foto_url) {
+        console.log('Foto URL recibida en respuesta:', data.foto_url);
+        data.foto = `${data.foto_url}?t=${new Date().getTime()}`;
+      }
+      
+      console.log('Respuesta del servidor procesada:', data);
+      return data;
     } catch (error) {
       console.error(`Error al actualizar cliente con ID ${id}:`, error);
       throw error;
