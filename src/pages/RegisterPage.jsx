@@ -161,7 +161,16 @@ export default function RegisterPage() {
         {error && (
           <div className="bg-red-50 border-l-4 border-red-400 p-4 rounded-md mb-6 flex items-center">
             <FaExclamationCircle className="mr-2 text-danger-500" />
-            <span className="text-gray-700">{error}</span>
+            <span className="text-gray-700">
+              {error}
+              {error.includes("ya está registrado como cliente") && (
+                <div className="mt-2">
+                  <Link to="/vincular-cliente" className="text-primary-500 hover:text-primary-600 font-medium">
+                    Ir a vincular cuenta
+                  </Link>
+                </div>
+              )}
+            </span>
           </div>
         )}
         
