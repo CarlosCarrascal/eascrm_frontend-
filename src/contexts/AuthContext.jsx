@@ -14,6 +14,24 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // Función para refrescar los datos del usuario
+  const refreshUserData = async () => {
+    try {
+      if (authService.isAuthenticated()) {
+        console.log("Refrescando datos del usuario y cliente...");
+        const userData = await authService.getCurrentUser();
+        console.log("Datos actualizados recibidos:", userData);
+        setCurrentUser(userData.user);
+        setCurrentCliente(userData.cliente);
+        return userData;
+      }
+      return null;
+    } catch (err) {
+      console.error('Error al refrescar datos del usuario:', err);
+      return null;
+    }
+  };
+
   // Verificar si hay un usuario autenticado al cargar
   useEffect(() => {
     const checkAuth = async () => {
@@ -91,6 +109,7 @@ export const AuthProvider = ({ children }) => {
     error,
     login,
     logout,
+    refreshUserData,
     isAuthenticated: isAuthenticated(),
     isCliente: isCliente(),
   };

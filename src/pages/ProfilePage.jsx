@@ -13,7 +13,7 @@ import { clienteService } from '../services/api';
 import { TextInput, Button } from '../components/FormElements';
 
 export default function ProfilePage() {
-  const { currentUser, currentCliente } = useAuth();
+  const { currentUser, currentCliente, refreshUserData } = useAuth();
   const navigate = useNavigate();
   const fileInputRef = useRef(null);
   
@@ -27,10 +27,44 @@ export default function ProfilePage() {
     foto: null
   });
   const [previewImage, setPreviewImage] = useState(null);
+  const [clienteData, setClienteData] = useState(null);
+  
+  // Función para refrescar los datos del cliente
+  const refreshClienteData = async () => {
+    try {
+      console.log("Refrescando datos del cliente desde ProfilePage");
+      // Usar la función del contexto de autenticación para actualizar los datos globalmente
+      const userData = await refreshUserData();
+      
+      if (userData && userData.cliente) {
+        setClienteData(userData.cliente);
+        
+        // Actualizar datos del formulario
+        setFormData({
+          nombre: userData.cliente.nombre || '',
+          email: userData.cliente.email || '',
+          direccion: userData.cliente.direccion || '',
+          foto: null
+        });
+        
+        // Actualizar preview de la imagen
+        if (userData.cliente.foto) {
+          // Añadir timestamp para evitar caché
+          const fotoUrl = `${userData.cliente.foto}?t=${new Date().getTime()}`;
+          console.log("Imagen actualizada recibida:", fotoUrl);
+          setPreviewImage(fotoUrl);
+        }
+      }
+    } catch (err) {
+      console.error('Error al refrescar datos del cliente:', err);
+    }
+  };
   
   // Cargar datos del cliente
   useEffect(() => {
+    console.log("ProfilePage: Efecto de montaje o cambio en currentCliente");
     if (currentCliente) {
+      console.log("ProfilePage: Actualizando con datos de currentCliente:", currentCliente);
       setFormData({
         nombre: currentCliente.nombre || '',
         email: currentCliente.email || '',
@@ -40,10 +74,24 @@ export default function ProfilePage() {
       
       // Si el cliente tiene una foto, mostrarla como preview
       if (currentCliente.foto) {
-        setPreviewImage(currentCliente.foto);
+        // Asegurarse de que la URL tiene un timestamp para evitar caché
+        const fotoUrl = currentCliente.foto.includes('?') 
+          ? currentCliente.foto 
+          : `${currentCliente.foto}?t=${new Date().getTime()}`;
+        console.log("Cargando imagen inicial:", fotoUrl);
+        setPreviewImage(fotoUrl);
       }
+      
+      setClienteData(currentCliente);
     }
   }, [currentCliente]);
+  
+  // Efecto para cargar datos frescos al montar el componente
+  useEffect(() => {
+    console.log("ProfilePage: Efecto de montaje");
+    refreshClienteData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   
   // Redirigir si no hay usuario autenticado o cliente
   useEffect(() => {
@@ -89,12 +137,34 @@ export default function ProfilePage() {
     setSuccess(false);
     
     try {
-      if (!currentCliente) {
+      if (!clienteData) {
         throw new Error('No se encontró información del cliente');
       }
       
+      // Crear un FormData para enviar la imagen
+      const formDataObj = new FormData();
+      formDataObj.append('nombre', formData.nombre);
+      formDataObj.append('email', formData.email);
+      formDataObj.append('direccion', formData.direccion);
+      
+      if (formData.foto) {
+        formDataObj.append('foto', formData.foto);
+      }
+      
       // Actualizar cliente
-      await clienteService.update(currentCliente.id, formData);
+      console.log("Enviando actualización para cliente ID:", clienteData.id);
+      const updatedCliente = await clienteService.update(clienteData.id, formDataObj);
+      console.log("Cliente actualizado:", updatedCliente);
+      
+      // Refrescar datos del cliente y usuario globalmente
+      await refreshClienteData();
+      
+      // Actualizar la vista previa con la nueva URL de la foto
+      if (updatedCliente.foto) {
+        const fotoUrl = `${updatedCliente.foto}?t=${new Date().getTime()}`;
+        console.log("Nueva URL de foto:", fotoUrl);
+        setPreviewImage(fotoUrl);
+      }
       
       setSuccess(true);
       setTimeout(() => setSuccess(false), 3000);
@@ -107,11 +177,11 @@ export default function ProfilePage() {
   };
   
   // Si no hay cliente, mostrar mensaje
-  if (!currentCliente && currentUser) {
+  if (!clienteData && currentUser) {
     return (
       <div className="max-w-3xl mx-auto px-4 py-12">
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h1 className="text-2xl font-bold mb-4">Mi Perfil</h1>
+          <h1 className="text-2xl font-bold mb-4 text-white">Mi Perfil</h1>
           <div className="bg-blue-50 border-l-4 border-blue-400 p-4 rounded-md">
             <p className="text-blue-700">
               No tienes un perfil de cliente asociado a tu cuenta. Por favor, contacta con el administrador.
@@ -127,7 +197,7 @@ export default function ProfilePage() {
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         {/* Encabezado */}
         <div className="bg-primary-600 p-6 text-white">
-          <h1 className="text-2xl font-bold">Mi Perfil</h1>
+          <h1 className="text-2xl font-bold text-white">Mi Perfil</h1>
           <p className="text-white/80 mt-1">Administra tu información personal</p>
         </div>
         
@@ -171,7 +241,7 @@ export default function ProfilePage() {
           </div>
           
           {/* Formulario */}
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} encType="multipart/form-data">
             <h2 className="text-lg font-semibold mb-4">Información del cliente</h2>
             
             {/* Foto de perfil */}

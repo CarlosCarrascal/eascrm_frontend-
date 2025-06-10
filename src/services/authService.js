@@ -117,7 +117,15 @@ const authService = {
         throw new Error('No hay usuario autenticado');
       }
       
-      const response = await axiosInstance.get(API_URL + 'current-user/');
+      // Añadir timestamp para evitar problemas de caché
+      const timestamp = new Date().getTime();
+      const response = await axiosInstance.get(`${API_URL}current-user/?t=${timestamp}`);
+      
+      // Si la respuesta incluye un cliente con foto, añadimos timestamp a la URL de la foto
+      if (response.data.cliente && response.data.cliente.foto) {
+        response.data.cliente.foto = `${response.data.cliente.foto}?t=${timestamp}`;
+      }
+      
       return response.data;
     } catch (error) {
       console.error('Error al obtener datos del usuario:', error);

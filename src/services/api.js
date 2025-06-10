@@ -215,12 +215,21 @@ export const clienteService = {
   
   update: async (id, cliente) => {
     try {
-      const formData = toFormData(cliente);
+      // Verificar si cliente ya es un FormData
+      const formData = cliente instanceof FormData ? cliente : toFormData(cliente);
+      
+      // Log para debug
+      console.log('Actualizando cliente:', id);
+      if (formData.get('foto')) {
+        console.log('Imagen incluida en la actualización');
+      }
+      
       const response = await apiClient.put(`clientes/${id}/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
+      console.log('Respuesta del servidor:', response.data);
       return response.data;
     } catch (error) {
       console.error(`Error al actualizar cliente con ID ${id}:`, error);
