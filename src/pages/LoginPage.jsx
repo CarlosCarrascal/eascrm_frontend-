@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { FaLock, FaUser, FaExclamationCircle, FaShoppingCart, FaCheckCircle } from 'react-icons/fa';
+import { FaLock, FaUser, FaExclamationCircle, FaShoppingCart, FaCheckCircle, FaHome } from 'react-icons/fa';
 import { useAuth } from '../contexts/AuthContext';
 import { TextInput, Button } from '../components/FormElements';
 
@@ -88,6 +88,17 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full bg-white rounded-lg shadow-md p-8">
+        {/* Botón de inicio en la parte superior */}
+        <div className="flex justify-end mb-4">
+          <Link 
+            to="/" 
+            className="text-primary-600 hover:text-primary-700 flex items-center text-sm font-medium"
+          >
+            <FaHome className="mr-1" size={16} />
+            Ir a Inicio
+          </Link>
+        </div>
+        
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Iniciar Sesión</h1>
           <p className="text-gray-600 mt-2">
@@ -190,13 +201,6 @@ export default function LoginPage() {
             ¿No tienes una cuenta?{' '}
             <Link to="/registro" className="text-primary-500 hover:text-primary-600 font-medium">
               Regístrate aquí
-            </Link>
-          </p>
-          
-          <p className="text-sm text-gray-600 mt-2">
-            ¿Ya eres cliente?{' '}
-            <Link to="/vincular-cliente" className="text-primary-500 hover:text-primary-600 font-medium">
-              Vincula tu cuenta
             </Link>
           </p>
           

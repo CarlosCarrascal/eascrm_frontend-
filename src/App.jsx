@@ -11,6 +11,7 @@ import OrderDetailPage from './pages/OrderDetailPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import LinkClientPage from './pages/LinkClientPage';
+import ProfilePage from './pages/ProfilePage';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -34,6 +35,10 @@ function App() {
               <Route
                 path="pedidos/:id"
                 element={<ProtectedRoute><OrderDetailPage /></ProtectedRoute>}
+              />
+              <Route
+                path="perfil"
+                element={<ProtectedRoute><ProfilePage /></ProtectedRoute>}
               />
             </Route>
             <Route path="login" element={<LoginPage />} />

@@ -16,7 +16,7 @@ import {
 } from 'react-icons/fa';
 
 export default function Navbar() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, currentUser } = useAuth();
   const { itemCount } = useCart();
   const navigate = useNavigate();
   const location = useLocation();
@@ -60,6 +60,9 @@ export default function Navbar() {
   // Clase para enlaces activos
   const activeLinkClass = "text-white font-medium";
   const inactiveLinkClass = "text-white/80 hover:text-white";
+
+  // Obtener el correo del usuario
+  const userEmail = currentUser?.email || 'usuario@ejemplo.com';
 
   return (
     <nav className={`sticky top-0 z-50 transition-all duration-300 ${
@@ -166,7 +169,7 @@ export default function Navbar() {
                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-1 z-10 border border-gray-200 transform origin-top-right transition-all duration-150">
                     <div className="px-4 py-3 border-b border-gray-100">
                       <p className="text-sm text-gray-500">Conectado como</p>
-                      <p className="text-sm font-medium text-gray-800 truncate">usuario@ejemplo.com</p>
+                      <p className="text-sm font-medium text-gray-800 truncate">{userEmail}</p>
                     </div>
                     <Link
                       to="/perfil"

@@ -9,23 +9,33 @@ export const TextInput = ({
   placeholder = '', 
   type = 'text',
   required = false,
-  error = ''
+  error = '',
+  icon = null,
+  disabled = false
 }) => {
   return (
     <div className="mb-4">
       <label htmlFor={name} className="block text-gray-700 font-medium mb-1">
         {label} {required && <span className="text-danger">*</span>}
       </label>
-      <input
-        type={type}
-        id={name}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        required={required}
-        className={`input ${error ? 'border-danger ring-1 ring-danger' : ''}`}
-      />
+      <div className="relative">
+        {icon && (
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            {icon}
+          </div>
+        )}
+        <input
+          type={type}
+          id={name}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          required={required}
+          disabled={disabled}
+          className={`input ${icon ? 'pl-10' : ''} ${error ? 'border-danger ring-1 ring-danger' : ''} ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+        />
+      </div>
       {error && <p className="text-danger text-sm mt-1">{error}</p>}
     </div>
   );
